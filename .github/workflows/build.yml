@@ -6,19 +6,36 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # Використовуємо стабільну версію системи
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Build APK with Buildozer
-      uses: digreatbrian/buildozer-action@v2
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.9
-        buildozer-cmd: buildozer -v android debug
+        python-version: '3.10'
+
+    - name: Install Buildozer dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev \
+          libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libncursesw5-dev \
+          libtinfo5 cmake zip unzip openjdk-17-jdk
+
+    - name: Install Buildozer and Cython
+      run: |
+        pip install --upgrade pip
+        pip install buildozer cython==0.29.33 kivy
+
+    - name: Build APK with Buildozer
+      run: |
+        yes | buildozer -v android debug
+      env:
+        TERM: xterm
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyKivyApp-APK
-        path: ./**/*.apk
+        path: bin/*.apk
