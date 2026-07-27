@@ -1,0 +1,10 @@
+{
+    "sound_volume": 0.7,
+    "sound_enabled": true,
+    "theme": "dark_green",
+    "password": "",
+    "language": "RU",
+    "gps_update_interval": 10,
+    "map_cache_size": 100,
+    "startup_tab": "КАРТА"
+}
